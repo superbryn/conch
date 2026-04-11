@@ -5,11 +5,12 @@ import (
 	"fmt"
 	"net"
 	"time"
+	"github.com/google/uuid"
 )
 
 type DiscoveryPacket struct {
 	Username string `json:"username"`
-	IP       string `json:"ip"`
+	ID       string `json:"ip"`
 	Payload  string `json:"payload"`
 }
 
@@ -17,6 +18,10 @@ const (
 	port          = ":9999"
 	broadcastAddr = "255.255.255.255:9999"
 	myUsername    = "Neeraj"
+)
+
+var (
+	myID = uuid.New().String()
 )
 
 func main() {
@@ -49,7 +54,7 @@ func startReceiver() {
 		}
 
 		if peer.Username != myUsername {
-			fmt.Printf("\n[Peer Online] %s (%s) - %s", peer.Username, remoteAddr.IP, peer.Payload)
+			fmt.Printf("\n[Peer Online] %s[%s] (%s) - %s", peer.Username,peer.ID, remoteAddr.IP, peer.Payload)
 			fmt.Print("\n> ") 
 		}
 	}
@@ -66,8 +71,8 @@ func startSender() {
 
 	packet := DiscoveryPacket{
 		Username: myUsername,
-		IP:       "Local", 
-		Payload:  "Looking for peers!",
+		ID: myID,
+		Payload:  "Hello what the fuck is a kilometer",
 	}
 
 	for {
