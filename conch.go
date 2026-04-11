@@ -51,6 +51,7 @@ func startReceiver(myName string) {
 
 	buffer := make([]byte, 2048)
 	for {
+
 		n, _, err := conn.ReadFromUDP(buffer)
 		if err != nil {
 			continue
@@ -61,7 +62,8 @@ func startReceiver(myName string) {
 		// Logic: If the message starts with our own name, ignore it 
 		// so we don't see our own messages echoed back.
 		if !strings.HasPrefix(message, myName+":") {
-			fmt.Printf("\r%s\n> ", message)
+			n, _, _ := conn.ReadFromUDP(buffer)
+			fmt.Printf("\r[Message] %s\n> ", string(buffer[:n]))
 		}
 	}
 }
